@@ -1,0 +1,1 @@
+web: gunicorn kode_restaurant.wsgi
