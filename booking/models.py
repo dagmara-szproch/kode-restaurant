@@ -20,6 +20,13 @@ TIME_SLOTS = (
 
 # Create your models here.
 class Booking(models.Model):
+    """
+    Stores restaurant booking information.
+    
+    Each booking is linked to a user and a restaurant. 
+    Includes booking date, time slot, number of people, and special requests.
+    Status indicates whether the booking is pending, confirmed, cancelled, or completed.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings_made')
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='bookings_received')
     booking_date = models.DateField()
@@ -30,6 +37,13 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        # Newest bookings appear first, then by time slot
+        ordering = ['-booking_date', 'time_slot']
+        # Ensure the same user cannot double-book the same restaurant at the same date and time slot
+        constraints = [
+            models.UniqueConstraint(fields=["user", "restaurant", "booking_date", "time_slot"], name="unique_booking")
+        ]
 
     def __str__(self):
         return f"Booking for {self.user.username} on {self.booking_date} at {self.time_slot} for {self.number_of_people} people."
