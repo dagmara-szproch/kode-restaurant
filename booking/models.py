@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from restaurant.models import Restaurant
 
 CHOICES = (
-    (0, 'Pending'),
     (1, 'Confirmed'),
     (2, 'Cancelled'),
     (3, 'Completed'),
@@ -25,7 +24,7 @@ class Booking(models.Model):
     
     Each booking is linked to a user and a restaurant. 
     Includes booking date, time slot, number of people, and special requests.
-    Status indicates whether the booking is pending, confirmed, cancelled, or completed.
+    Status indicates whether the booking is confirmed, cancelled, or completed.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings_made')
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='bookings_received')
@@ -33,7 +32,7 @@ class Booking(models.Model):
     time_slot = models.CharField(max_length=20, choices=TIME_SLOTS, default='12:00 PM - 1:30 PM')
     number_of_people = models.PositiveIntegerField()
     special_requests = models.TextField(blank=True)
-    status = models.IntegerField(choices=CHOICES, default=0)
+    status = models.IntegerField(choices=CHOICES, default=1) # Default to 'Confirmed'
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

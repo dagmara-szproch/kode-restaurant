@@ -36,9 +36,11 @@
                         <li><hr class="dropdown-divider"></li>
                     </ul>
                     </li>
+                    {% if restaurant %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Book a Table</a>
+                        <a class="nav-link" href="{% url 'create_booking' slug=restaurant.slug %}">Book a Table</a>
                     </li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>

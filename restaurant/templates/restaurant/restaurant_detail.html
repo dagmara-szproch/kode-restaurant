@@ -7,7 +7,9 @@
         <div class="col-md-6">
             <h1>{{ restaurant.name }}</h1>
             <p class="lead">{{ restaurant.description }}</p>
-            <a href="" class="btn btn-primary">Book a Table</a>
+            {% if restaurant %}
+            <a href="{% url 'create_booking' slug=restaurant.slug %}" class="btn btn-primary">Book a Table</a>
+            {% endif %}
         </div>
 
         <!-- Column 2: Carousel / images -->
