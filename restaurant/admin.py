@@ -4,4 +4,5 @@ from .models import Restaurant
 # Register your models here.
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
     list_display = ('name', 'city', 'phone_number', 'is_active', 'table_capacity', 'online_capacity')
