@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Libertinus+Keyboard&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/* CSS Variables */
+:root {
+    --font-headings: 'Poppins', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+    --font-kode: 'Libertinus Keyboard', monospace;
+    --font-restaurant: 'Audiowide', cursive;
+    --primary-color: #bb8726;
+    --secondary-color: #5e4b31;
+    --navbar-color: #eff5e4;
+}
+
+/* Global styles */
+
+/* Restaurant logo/name */
+.brand-kode {
+    font-family: var(--font-kode);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color) !important;
+}
+
+.brand-restaurant {
+    font-family: var(--font-restaurant);
+    font-size: 1.5rem;
+    color: var(--secondary-color) !important;
+}
+
+/* Body */
+body {
+    font-family: var(--font-body);
+    background-image: url("../images/background.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Headings, navbar and footer */
+h1, h2, h3 {
+    font-family: var(--font-restaurant);
+    color: var(--primary-color);
+}
+
+#navbar,
+footer,
+.dropdown-menu {
+    color: var(--secondary-color);
+    background-color: var(--navbar-color);
+}
+
+#navbar .nav-link,
+footer a,
+.dropdown-item {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+#navbar .nav-link:hover,
+footer a:hover,
+.dropdown-item:hover {
+    color: var(--primary-color);
+    background-color: var(--navbar-color);
+}
+
+/* Column 2 - Carousel */
+#restaurantCarousel {
+    border: 10px solid rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+}
+
+.carousel-inner {
+    height: auto;
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+/* Column 1 - Lead text / description / button */
+.lead-text {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    color: white;
+}
+
+.btn-book {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Login, Logout, Sign Up(Register), Book a table  */
+.card {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: var(--navbar-color);
+}
+
+.text {
+    font-size: 1.1rem;
+}
+
+.link {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.login input,
+.signup input,
+.logout input,
+.book input {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.login button,
+.logout button,
+.signup button,
+.book-btn {
+    background-color: var(--secondary-color);
+    color: var(--navbar-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.restaurant-name {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    font-family: var(--font-restaurant);
+}
+
+form textarea {
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Override Bootstrap's focus style */
+.form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Table styles */
+.table-header {
+    background-color: var(--navbar-color);
+}
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table td, 
+.table th {
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(94, 75, 49, 0.1);
+}
+
+.badge,
+.booking-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    margin: 2px;
+}
+
+.btn-confirmed {
+    background-color: #0d9b2e; /* Green */
+}
+
+.btn-cancelled {
+    background-color: #c16d07; /* Red */
+}
+
+.btn-completed {
+    background-color: #6c757d; /* Gray */
+}
+
+.btn-edit {
+    background-color: var(--secondary-color);
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: #c10707; /* Red */
+    transition: background-color 0.3s ease;
+}
+
+/* Edit Form */
+#editForm {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: var(--navbar-color);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#id_number_of_people,
+#id_number_of_people:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+/* Media Queries */
+@media (max-width: 1400px) and (min-width: 992px) {
+     
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .container {
+        max-width: 100% !important;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+}
+
+@media (max-width: 767px) {
+    .lead-text h1 {
+        font-size: 1.5rem;
+    }
+
+    .lead-text p {
+        font-size: 1rem;
+    }
+}
