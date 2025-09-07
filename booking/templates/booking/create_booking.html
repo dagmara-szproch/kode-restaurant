@@ -1,65 +1,46 @@
 {% extends "base.html" %}
 {% load static %}
+{% block scripts %}
 
 {% block content %}
 <div class="container mt-4">
-  {% if restaurant %}
-    <p>You are making a booking at <strong>{{ restaurant.name }}</strong>.</p>
-  {% else %}
-    <p>Please select a restaurant from the menu.</p>
-  {% endif %}
+  <div class="row justify-content-center mt-5">
+    <div class="col-12 col-md-10 col-lg8">
+      <div class="card p-4 shadow-sm rounded">
+        {% if restaurant %}
+          <p class="text text-center mb-3">You are making a booking at <br> <span class="restaurant-name">{{ restaurant.name }}</span>.</p>
+        {% else %}
+          <p class="text mb-3">Please select a restaurant from the menu.</p>
+        {% endif %}
 
-  <h3>Book a Table</h3>
-  <form method="post">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger">
-      {{ form.non_field_errors }}
+        <h3 class="mb-3 fw-bold text-center">Book a Table</h3>
+        <form method="post" class="book mt-3">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+          </div>
+          {% endif %}
+          {{ form.as_p }}
+          <button class="btn book-btn" type="submit">Book Now &raquo;</button>
+        </form>
+      </div>
     </div>
-  {% endif %}
-
-    {{ form.as_p }}
-    <!-- Date field
-    <div class="mb-3">
-      <label for="id_booking_date">Booking Date</label>
-      {{ form.booking_date }}
-    </div>
-
-    <!-- Time slot -->
-    <!-- <div class="mb-3">
-      <label for="id_time_slot">Time Slot</label>
-      {{ form.time_slot }}
-    </div> -->
-
-    <!-- Number of people -->
-    <!-- <div class="mb-3">
-      <label for="id_number_of_people">Number of People</label>
-      {{ form.number_of_people }}
-    </div> -->
-
-    <!-- Special requests -->
-    <!-- <div class="mb-3">
-      <label for="id_special_requests">Special Requests</label>
-      {{ form.special_requests }}
-    </div> -->
-    <button class="btn btn-primary" type="submit">Book Now</button>
-  </form>
+  </div>
 </div>
 
 <!-- Flatpickr CSS & JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     flatpickr("#id_booking_date", {
       altInput: true, // Show a user-friendly date
       altFormat: "F j, Y",
       dateFormat: "Y-m-d",
-      inline: true, // Display calendar inline
       minDate: new Date().fp_incr(1), // Tomorrow
       maxDate: new Date().fp_incr(180), // 180 days from now
       disable: ["2025-12-25", "2025-12-31"], // Disable specific dates
     });
   });
 </script>
+{% endblock %}
 {% endblock %}
