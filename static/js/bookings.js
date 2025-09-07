@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const peopleField = document.getElementById("id_number_of_people");
   const editButtons = document.querySelectorAll(".btn-edit");
   const cancelButtons = document.querySelectorAll(".btn-cancel");
+  const closeButton = document.getElementById("closeButton");
 
   // Handle Edit button
   editButtons.forEach(button => {
@@ -28,4 +29,10 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   });
+
+  // Handle Close button
+  closeButton.addEventListener('click', () => {
+    editForm.style.display = 'none';
+  });
 });
+
