@@ -8,8 +8,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const cancelModal = new bootstrap.Modal(document.getElementById("cancelModal"));
   const cancelButtons = document.getElementsByClassName("btn-cancel");
   const cancelConfirm = document.getElementById("confirmCancel");
-  
-  let bookingId = null;
 
   /*
    * Initializes edit functionality for the provided edit buttons.
@@ -54,19 +52,13 @@ document.addEventListener("DOMContentLoaded", function() {
   for (let button of cancelButtons) {
     button.addEventListener("click", (e) => {
       const bookingId = e.target.getAttribute("data-id");
-      cancelConfirm.href = `/booking/cancel-booking/${bookingId}`;
+      cancelConfirm.addEventListener("click", () => {
+        window.location.href = `/booking/cancel-booking/${bookingId}`;
+      }, { once: true });
       cancelModal.show();
     });
   }
   
-  // Handle "Yes, cancel"
-  cancelConfirm.addEventListener("click", () => {
-    if (bookingId) {
-      window.location.href = `/booking/cancel-booking/${bookingId}`;
-    }
-  });
-
-
   /* 
    * Handles the close button of the edit form.
    *
