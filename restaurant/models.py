@@ -1,8 +1,13 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 
+
 # Create your models here.
 class Restaurant(models.Model):
+    """
+    Stores information about a restaurant, including contact details,
+    description, table and online capacities.
+    """
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
     address = models.CharField(max_length=255)
@@ -13,15 +18,27 @@ class Restaurant(models.Model):
     is_active = models.BooleanField(default=True)
     table_capacity = models.PositiveIntegerField(default=80)
     online_capacity = models.PositiveIntegerField(default=50)
-    opening_hours = models.CharField(max_length=255, blank=True, null=True, help_text="E.g., Mon-Fri 9am-9pm, Sat-Sun 10am-10pm")
 
     def __str__(self):
         return self.name
 
+
 class RestaurantCarouselImage(models.Model):
-    restaurant = models.ForeignKey(Restaurant, related_name='carousel_images', on_delete=models.CASCADE)
+    """
+    Stores a single carousel image related to a :model:`restaurant.Restaurant`,
+    including the image file, optional caption, and display order.
+    """
+    restaurant = models.ForeignKey(
+        Restaurant,
+        related_name='carousel_images',
+        on_delete=models.CASCADE
+    )
     image = CloudinaryField('image')
-    caption = models.CharField(max_length=255, blank=True, null=True, help_text="Optional caption for the image")
+    caption = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text="Optional caption for the image")
     order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
