@@ -126,12 +126,15 @@ def edit_booking(request, pk):
             if current_bookings + new_people > booking.restaurant.online_capacity:
                 form.add_error(
                     'number_of_people', 
-                    f"Cannot update booking due to capacity limits. Only {booking.restaurant.online_capacity - current_bookings} spots left for this time slot."
+                    f"Cannot update booking due to capacity limits. "
+                    f"Only {booking.restaurant.online_capacity - current_bookings} spots left for this time slot."
                 )
             else:
                 booking.number_of_people = new_people
                 booking.save()
-                messages.success(request, "Your booking has been updated successfully!")
+                messages.success(request, f"Your booking for {booking.booking_date} at {booking.time_slot} "
+                                          f"has been updated successfully to {booking.number_of_people} guests."
+                )
 
         else: # Form is not valid
             messages.error(request, "There was an error updating your booking. Please check the form and try again.")
