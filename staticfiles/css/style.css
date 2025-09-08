@@ -37,7 +37,7 @@ body {
 
 /* Headings, navbar and footer */
 h1, h2, h3 {
-    font-family: var(--font-restaurant);
+    font-family: var(--font-headings);
     color: var(--primary-color);
 }
 
@@ -70,6 +70,7 @@ footer a:hover,
 
 .carousel-inner {
     height: auto;
+    
 }
 
 .carousel-inner img {
@@ -77,6 +78,15 @@ footer a:hover,
     height: 400px;
     object-fit: cover;
 }
+
+.carousel-caption {
+  background-color: rgba(0,0,0,0.55) !important;
+  color: #fff !important;
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.4rem;
+}
+
 
 /* Column 1 - Lead text / description / button */
 .lead-text {
@@ -226,27 +236,14 @@ form textarea {
     border-color: var(--primary-color) !important;
     box-shadow: none !important;
     outline: none !important;
-
-/* Media Queries */
-@media (max-width: 1400px) and (min-width: 992px) {
-     
 }
 
-@media (max-width: 991px) and (min-width: 768px) {
+/* Media Queries */
+@media (min-width: 768px) and (max-width: 991px) {
     .container {
         max-width: 100% !important;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
     }
-
 }
 
-@media (max-width: 767px) {
-    .lead-text h1 {
-        font-size: 1.5rem;
-    }
-
-    .lead-text p {
-        font-size: 1rem;
-    }
-}
