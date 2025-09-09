@@ -7,31 +7,71 @@ from .forms import BookingForm, EditBookingForm
 from .models import Booking
 from restaurant.models import Restaurant
 
-# Create your views here.
-def get_current_bookings(restaurant, booking_date, time_slot, exclude_booking=None):
-    """
-    Helper function to return total number of people already booked for a restaurant at a specific date and time.
-    Optionally exlude a specific booking (useful when editing an existing booking)."""
 
+# Create your views here.
+def get_current_bookings(
+        restaurant,
+        booking_date,
+        time_slot,
+        exclude_booking=None
+        ):
+    """
+    Helper function to calculate the total number of people already booked
+    for a restaurant at a specific date and time slot.
+
+    **Parameters:**
+
+    - restaurant
+        An instance of :model:`restaurant.Restaurant`.
+    - booking_date
+        The date to check bookings for.
+    - time_slot
+        The time slot to check bookings for.
+    - exclude_booking (optional)
+        An instance of :model:`booking.Booking` to exclude from the count
+        (useful when editing an existing booking).
+
+    **Returns:**
+
+    Integer representing the total number of people already booked.
+    """
     queryset = Booking.objects.filter(
         restaurant=restaurant,
         booking_date=booking_date,
         time_slot=time_slot,
     )
- 
+
     if exclude_booking:
         queryset = queryset.exclude(pk=exclude_booking.pk)
 
-    return queryset.aggregate(Sum('number_of_people'))['number_of_people__sum'] or 0
+    return (
+        queryset.aggregate(Sum('number_of_people'))['number_of_people__sum']
+        or 0
+    )
+
 
 # Create booking
-
 @login_required
 def create_booking(request, slug):
     """
     Handle the creation of a new booking for a specific restaurant.
-    Validates against double-booking and restaurant capacity.
-    Each booking is linked to the logged-in user and the selected restaurant.
+
+    **Context:**
+
+    ``form``
+        An instance of :form:`booking.BookingForm`.
+    ``restaurant``
+        An instance of :model:`restaurant.Restaurant`.
+
+    **Behaviour:**
+
+    - Validates against double-booking by the same user.
+    - Ensures that the restaurant's online capacity is not exceeded.
+    - On success, saves the booking and redirects to :view:`my_bookings`.
+
+    **Template:**
+
+    :template:`booking/create_booking.html`
     """
     restaurant = get_object_or_404(Restaurant, slug=slug)
 
@@ -40,38 +80,47 @@ def create_booking(request, slug):
         if form.is_valid():
             booking = form.save(commit=False)
             booking.user = request.user
-            booking.restaurant = restaurant # Link booking to the selected restaurant
+            booking.restaurant = restaurant
 
-            # check unique booking constraint (User cannot have multiple bookings for the same restaurant at the same date and time)
             if Booking.objects.filter(
-                user=request.user, 
-                restaurant=restaurant, 
-                booking_date=booking.booking_date, 
+                user=request.user,
+                restaurant=restaurant,
+                booking_date=booking.booking_date,
                 time_slot=booking.time_slot
             ).exists():
                 form.add_error(
                     None,
-                    "You already have a booking for this restaurant at the selected date and time."
+                    "You already have a booking for this restaurant at the "
+                    "selected date and time."
                 )
-         
-            # check restaurant capacity (sum of all bookings for the restaurant at the same date and time should not exceed online_capacity)
-            current_bookings = get_current_bookings(restaurant, booking.booking_date, booking.time_slot)
-            if current_bookings + booking.number_of_people > restaurant.online_capacity:
+
+            current_bookings = get_current_bookings(
+                restaurant,
+                booking.booking_date,
+                booking.time_slot
+            )
+
+            if (current_bookings + booking.number_of_people
+                    > restaurant.online_capacity):
                 form.add_error(
-                    'number_of_people', 
-                    "The restaurant cannot accommodate your booking due to capacity limits. Please choose a different time or reduce the number of people."
+                    'number_of_people',
+                    "The restaurant cannot accommodate your "
+                    "booking due to capacity limits. Please choose "
+                    "a different time or reduce the number of people."
                 )
 
             if not form.errors:
                 booking.save()
-                messages.success(request, "Your booking has been created successfully!")
-                return redirect('my_bookings') # Redirect to a page showing user's bookings
+                messages.success(request,
+                                 "Your booking has been created successfully!"
+                                 )
+                return redirect('my_bookings')
 
     else:
         form = BookingForm()
-        
+
     return render(
-        request, 
+        request,
         'booking/create_booking.html',
         {
             'form': form,
@@ -85,18 +134,32 @@ def create_booking(request, slug):
 def my_bookings(request):
     """
     Display a list of bookings made by the logged-in user.
-    
-    The view retrieves all bookings associated with the current user,
-    ordered by booking date (newest first) and time slot.
 
+    **Context:**
+
+    ``bookings``
+        A queryset of :model:`booking.Booking` for the current user,
+        ordered by booking date (newest first) and time slot.
+
+    **Behaviour:**
+
+    - Automatically marks past bookings as 'Completed'.
+
+    **Template:**
+
+    :template:`booking/my_bookings.html`
     """
     today = now().date()
     # Mark past bookings as 'Completed'
-    Booking.objects.filter(user=request.user, booking_date__lt=today).update(status=3)
+    Booking.objects.filter(user=request.user,
+                           booking_date__lt=today).update(status=3)
 
-    bookings = Booking.objects.filter(user=request.user).order_by('-booking_date', 'time_slot')
+    bookings = Booking.objects.filter(
+        user=request.user
+    ).order_by('-booking_date', 'time_slot')
+
     return render(
-        request, 
+        request,
         'booking/my_bookings.html',
         {
             'bookings': bookings
@@ -107,37 +170,61 @@ def my_bookings(request):
 @login_required
 def edit_booking(request, pk):
     """
-    Handle the editing of an existing booking via inline JS form.
-    Allows updating the number of people for the booking, while ensuring
-    that the restaurant's capacity is not exceeded.
-    
+    Handle editing an existing booking.
+
+    **Context:**
+
+    ``form``
+        An instance of :form:`booking.EditBookingForm`.
+    ``booking``
+        An instance of :model:`booking.Booking` being edited.
+
+    **Behaviour:**
+
+    - Allows updating the number of people for a booking.
+    - Validates against the restaurant's capacity.
+    - Displays success or error messages and redirects to :view:`my_bookings`.
     """
     booking = get_object_or_404(Booking, pk=pk, user=request.user)
-    
+
     if request.method == 'POST':
         form = EditBookingForm(request.POST, instance=booking)
         if form.is_valid():
             new_people = form.cleaned_data['number_of_people']
 
-         # check restaurant capacity
-            current_bookings = get_current_bookings(booking.restaurant, booking.booking_date, booking.time_slot, exclude_booking=booking)
-             # Calculate the difference in number of people
+            current_bookings = get_current_bookings(booking.restaurant,
+                                                    booking.booking_date,
+                                                    booking.time_slot,
+                                                    exclude_booking=booking
+                                                    )
 
-            if current_bookings + new_people > booking.restaurant.online_capacity:
+            remaining_spots = (
+                booking.restaurant.online_capacity - current_bookings
+            )
+
+            if (current_bookings + new_people
+                    > booking.restaurant.online_capacity):
                 form.add_error(
-                    'number_of_people', 
-                    f"Cannot update booking due to capacity limits. "
-                    f"Only {booking.restaurant.online_capacity - current_bookings} spots left for this time slot."
+                    'number_of_people',
+                    "Cannot update booking due to capacity limits. "
+                    f"Only {remaining_spots} spots left for this time slot."
                 )
+
             else:
                 booking.number_of_people = new_people
                 booking.save()
-                messages.success(request, f"Your booking for {booking.booking_date} at {booking.time_slot} "
-                                          f"has been updated successfully to {booking.number_of_people} guests."
+                messages.success(
+                    request,
+                    f"{booking.booking_date} at {booking.time_slot} "
+                    "has been updated successfully to "
+                    f"{booking.number_of_people} guests."
                 )
 
-        else: # Form is not valid
-            messages.error(request, "There was an error updating your booking. Please check the form and try again.")
+        else:
+            messages.error(request,
+                           "There was an error updating your booking. "
+                           "Please check the form and try again.")
+       
         return redirect('my_bookings')
 
 
@@ -146,10 +233,14 @@ def edit_booking(request, pk):
 def cancel_booking(request, pk):
     """
     Handle the cancellation of an existing booking.
-    Sets the booking status to 'Cancelled'.
+
+    **Behaviour:**
+
+    - Sets the booking status to 'Cancelled'.
+    - Displays a success message and redirects to :view:`my_bookings`.
     """
     booking = get_object_or_404(Booking, pk=pk, user=request.user)
-    booking.status = 2  # Set status to 'Cancelled'
+    booking.status = 2
     booking.save()
     messages.success(request, "Your booking has been cancelled.")
     return redirect('my_bookings')
