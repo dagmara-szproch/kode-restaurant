@@ -15,8 +15,11 @@
                     {% csrf_token %}
                     {% if redirect_field_value %}
                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                    {% endif %}
-                    <button class="btn btn-signup right" type="submit">{% trans 'Sign Out' %} &raquo;</button>
+                    {% endif %}        
+                    <div class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-signup right" type="submit">{% trans 'Sign Out' %} &raquo;</button>
+                        <a href="{% url 'home' %}" class="btn cancel-btn btn-completed">{% trans 'Cancel' %}</a>
+                    </div>
                 </form>
             </div>
         </div>

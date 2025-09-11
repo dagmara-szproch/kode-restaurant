@@ -255,10 +255,10 @@ form.book label {
 }
 
 /* Media Queries */
-@media (min-width: 768px) and (max-width: 991px) {
+/* @media (min-width: 768px) and (max-width: 991px) {
     .container {
         max-width: 100%;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
     }
-}
+} */
