@@ -87,7 +87,7 @@ def create_booking(request, slug):
                 restaurant=restaurant,
                 booking_date=booking.booking_date,
                 time_slot=booking.time_slot
-            ).exists():
+            ).exclude(status=2).exists():
                 form.add_error(
                     None,
                     "You already have a booking for this restaurant at the "
@@ -103,7 +103,7 @@ def create_booking(request, slug):
             if (current_bookings + booking.number_of_people
                     > restaurant.online_capacity):
                 form.add_error(
-                    'number_of_people',
+                    None,
                     "The restaurant cannot accommodate your "
                     "booking due to capacity limits. Please choose "
                     "a different time or reduce the number of people."
@@ -204,8 +204,8 @@ def edit_booking(request, pk):
 
             if (current_bookings + new_people
                     > booking.restaurant.online_capacity):
-                form.add_error(
-                    'number_of_people',
+                messages.error(
+                    request,
                     "Cannot update booking due to capacity limits. "
                     f"Only {remaining_spots} spots left for this time slot."
                 )

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User
 from restaurant.models import Restaurant
 
@@ -53,7 +54,10 @@ class Booking(models.Model):
 
     - Bookings are ordered by `-booking_date` then `time_slot`.
     - Unique constraint prevents a user from double-booking the same restaurant
-      at the same date and time slot.
+      at the same date and time slot (applies only to
+      Confirmed and Completed bookings).
+    - Allows cancelled bookings to be replaced with
+      a new booking for the same slot.
 
     **String representation:**
 
@@ -76,11 +80,14 @@ class Booking(models.Model):
     class Meta:
         ordering = ['-booking_date', 'time_slot']
         constraints = [
-            models.UniqueConstraint(fields=["user",
-                                            "restaurant",
-                                            "booking_date",
-                                            "time_slot"],
-                                    name="unique_booking")
+            models.UniqueConstraint(
+                fields=["user",
+                        "restaurant",
+                        "booking_date",
+                        "time_slot"],
+                condition=Q(status__in=[1, 3]),
+                name="unique_booking"
+            )
         ]
 
     def __str__(self):
