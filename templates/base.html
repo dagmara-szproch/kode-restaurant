@@ -46,14 +46,14 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'restaurant_detail' slug='kode-restaurant-fictionville' %}">Fictionville Kode Restaurant</a></li>
+                        <li><hr class="dropdown-divider"></li>                       
                         <li><a class="dropdown-item" href="{% url 'restaurant_detail' slug='kode-restaurant-snackville' %}">Snackville Kode Restaurant</a></li>
-                        <li><hr class="dropdown-divider"></li>
                     </ul>
                     </li>
                     <!-- Book a table -->
                     {% if restaurant %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create_booking' slug=restaurant.slug %}">Book a Table</a>
+                        <a class="nav-link" href="{% url 'create_booking' slug=restaurant.slug %}">Book Table</a>
                     </li>
                     {% endif %}
                     <!-- My Bookings -->
@@ -84,7 +84,6 @@
                     <li class="nav-item">
                         <a class="fw-bold nav-link {% if request.path == login_url %}active{% endif %}" {% if request.path == login_url %}aria-current="page"{% endif %} href="{% url 'account_login' %}">Login</a>
                     </li>
-                    
                     {% endif %}
                 </ul>
             </div>
@@ -92,14 +91,13 @@
     </nav>
 
 
-    <main class="flex-grow-1 mt-5 pt-3">
+    <main class="flex-grow-1 mt-5 pt-3  mb-4">
         {% block content %}
         <!-- Content goes here -->
         {% endblock content %}
     </main> 
 
     
-
     <footer class="mt-auto">
         <div class="container text-center mt-3 mb-3">
            <p>

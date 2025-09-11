@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5 pt-3 mb-2">
+<div class="container mt-5 pt-3">
     <div class="container text-center mt-2 mb-3 p-3 lead-text">
     <h1 class="fw-bold mt-3 mb-4">Welcome to <br> 
         <span class="brand-kode fs-2">Kode</span> Restaurant</h1>
@@ -16,7 +16,7 @@
                 <h1 class="mt-3 fw-bold">{{ restaurant.name }}</h1>
                 <p class="lead mt-2">{{ restaurant.description }}</p>
                 {% if restaurant %}
-                <a href="{% url 'create_booking' slug=restaurant.slug %}" class="btn btn-book mt-auto align-self-center">Book a Table</a>
+                <a href="{% url 'create_booking' slug=restaurant.slug %}" class="btn btn-book-table mt-auto align-self-center">Book a Table</a>
                 {% endif %}
             </div>
         </div>

@@ -17,13 +17,13 @@
     font-family: var(--font-kode);
     font-size: 1.5rem;
     font-weight: bold;
-    color: var(--primary-color) !important;
+    color: var(--primary-color);
 }
 
 .brand-restaurant {
     font-family: var(--font-restaurant);
     font-size: 1.5rem;
-    color: var(--secondary-color) !important;
+    color: var(--secondary-color);
 }
 
 /* Body */
@@ -80,27 +80,27 @@ footer a:hover,
 }
 
 .carousel-caption {
-  background-color: rgba(0,0,0,0.55) !important;
-  color: #fff !important;
+  background-color: rgba(0,0,0,0.7);
+  color: #fff;
   display: inline-block;
   padding: 0.4rem 0.8rem;
   border-radius: 0.4rem;
 }
 
-
 /* Column 1 - Lead text / description / button */
 .lead-text {
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 12px;
-    color: white;
+    color: var(--navbar-color);
 }
 
-.btn-book {
+.btn-book-table {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--navbar-color);
     border: none;
     padding: 10px 20px;
     font-size: 1.2rem;
+    font-weight: bold;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
@@ -114,6 +114,7 @@ footer a:hover,
 
 .text {
     font-size: 1.1rem;
+    color: var(--secondary-color);
 }
 
 .link {
@@ -127,12 +128,14 @@ footer a:hover,
 .book input {
     border-radius: 5px;
     padding: 10px;
+    border-color: var(--primary-color);
 }
 
 .login button,
 .logout button,
 .signup button,
-.book-btn {
+.book-btn,
+.cancel-btn {
     background-color: var(--secondary-color);
     color: var(--navbar-color);
     border: none;
@@ -150,17 +153,29 @@ footer a:hover,
     font-family: var(--font-restaurant);
 }
 
-form textarea {
-    resize: vertical;
-    width: 100%;
-    box-sizing: border-box;
+/* Form Book a Table */
+#id_time_slot {
+    border-color: var(--primary-color);
+    border-radius: 5px;
 }
 
-/* Override Bootstrap's focus style */
+form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border-color: var(--primary-color);
+    border-radius: 5px;
+}
+
+form.book label {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+/* Override Bootstrap's focus style - Booking form */
 .form-control:focus {
-    border-color: var(--primary-color) !important;
-    box-shadow: none !important;
-    outline: none !important;
+    border-color: var(--primary-color);
+    box-shadow: none;
+    outline: none;
 }
 
 /* Table styles */
@@ -194,7 +209,7 @@ form textarea {
 }
 
 .btn-confirmed {
-    background-color: #0d9b2e; /* Green */
+    background-color: #057820e6; /* Green */
 }
 
 .btn-cancelled {
@@ -215,7 +230,7 @@ form textarea {
     transition: background-color 0.3s ease;
 }
 
-/* Edit Form */
+/* Edit Form / Number of people field - booking form  */
 #editForm {
     display: none;
     position: fixed;
@@ -233,17 +248,17 @@ form textarea {
 
 #id_number_of_people,
 #id_number_of_people:focus {
-    border-color: var(--primary-color) !important;
-    box-shadow: none !important;
-    outline: none !important;
+    border-color: var(--primary-color);
+    box-shadow: none;
+    outline: none;
+    border-radius: 5px;
 }
 
 /* Media Queries */
 @media (min-width: 768px) and (max-width: 991px) {
     .container {
-        max-width: 100% !important;
+        max-width: 100%;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
     }
 }
-
