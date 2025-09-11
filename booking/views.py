@@ -89,7 +89,7 @@ def create_booking(request, slug):
                 time_slot=booking.time_slot
             ).exclude(status=2).exists():
                 form.add_error(
-                    None,
+                    'time_slot',
                     "You already have a booking for this restaurant at the "
                     "selected date and time."
                 )
@@ -103,7 +103,7 @@ def create_booking(request, slug):
             if (current_bookings + booking.number_of_people
                     > restaurant.online_capacity):
                 form.add_error(
-                    None,
+                    'number_of_people',
                     "The restaurant cannot accommodate your "
                     "booking due to capacity limits. Please choose "
                     "a different time or reduce the number of people."

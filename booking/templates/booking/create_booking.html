@@ -3,25 +3,38 @@
 {% block scripts %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-4 mb-4">
   <div class="row justify-content-center mt-5">
     <div class="col-12 col-md-10 col-lg8">
       <div class="card p-4 shadow-sm rounded">
         {% if restaurant %}
-          <p class="text text-center mb-3">You are making a booking at <br> <span class="restaurant-name">{{ restaurant.name }}</span>.</p>
+          <p class="text text-center mb-3">You are making a booking at <br>
+          <span class="brand-kode">Kode</span> 
+          <span class="brand-restaurant">Restaurant</span>
+          <span class="restaurant-name">{{ restaurant.city }}</span>.</p>
         {% else %}
           <p class="text mb-3">Please select a restaurant from the menu.</p>
         {% endif %}
 
         <h3 class="mb-3 fw-bold text-center">Book a Table</h3>
+
         <form method="post" class="book mt-3">
           {% csrf_token %}
-          {% if form.non_field_errors %}
-          <div class="alert alert-danger">
-            {{ form.non_field_errors }}
-          </div>
-          {% endif %}
-          {{ form.as_p }}
+
+          {% for field in form %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.errors %}
+                <div class="alert alert-danger mt-2">
+                {% for error in field.errors %}
+                  {{ error }}<br>
+                {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}  
+
           <button class="btn book-btn" type="submit">Book Now &raquo;</button>
         </form>
       </div>
