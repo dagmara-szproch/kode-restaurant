@@ -1,10 +1,9 @@
 from django.test import TestCase
 from datetime import date, timedelta
-from .forms import BookingForm
+from .forms import BookingForm, EditBookingForm
 
 
 class TestBookingForm(TestCase):
-
     def test_form_is_valid(self):
         tomorrow = date.today() + timedelta(days=1)
         booking_form = BookingForm({
@@ -62,7 +61,7 @@ class TestBookingForm(TestCase):
             'number_of_people': -1,
             'special_requests': ''
             })
-        self.assertFalse(booking_form.is_valid(), msg='Form is not valid')
+        self.assertFalse(booking_form.is_valid(), msg='Form is valid')
 
     def test_form_is_invalid_with_more_than_six_people(self):
         last_day = date.today() + timedelta(days=180)
@@ -72,10 +71,30 @@ class TestBookingForm(TestCase):
             'number_of_people': 7,
             'special_requests': ''
             })
-        self.assertFalse(booking_form.is_valid(), msg='Form is not valid')
+        self.assertFalse(booking_form.is_valid(), msg='Form is valid')
 
     def test_form_is_invalid_with_missing_fields(self):
         booking_form = BookingForm({'number_of_people': 5})
         self.assertFalse(booking_form.is_valid(), msg='Form is valid')
         self.assertIn('booking_date', booking_form.errors)
         self.assertIn('time_slot', booking_form.errors)
+
+
+class TestEditBookingForm(TestCase):
+    def test_form_is_invalid_with_less_than_one_people(self):
+        edit_form = EditBookingForm({
+            'number_of_people': -1,
+            })
+        self.assertFalse(edit_form.is_valid(), msg='Form is valid')
+  
+    def test_form_is_invalid_with_more_than_six_people(self):
+        edit_form = EditBookingForm({
+            'number_of_people': 78,
+            })
+        self.assertFalse(edit_form.is_valid(), msg='Form is valid')
+
+    def test_form_is_valid_with_range(self):
+        edit_form = EditBookingForm({
+            'number_of_people': 5,
+            })
+        self.assertTrue(edit_form.is_valid(), msg='Form is not valid')
