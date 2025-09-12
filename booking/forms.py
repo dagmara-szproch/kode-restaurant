@@ -22,8 +22,7 @@ class BookingForm(forms.ModelForm):
 
     - `booking_date` cannot be today or a past date,
       and cannot be more than 180 days in advance.
-    - `number_of_people` is chosen by the user
-      (further capacity checks are handled in views).
+    - `number_of_people` must be an integer between 1 and 6 inclusive.
 
     **Widgets:**
 
@@ -60,12 +59,25 @@ class BookingForm(forms.ModelForm):
             raise forms.ValidationError(
                 "You cannot book for today or a past date."
             )
-        if booking_date >= max_date:
+        if booking_date > max_date:
             raise forms.ValidationError(
                 "You cannot book more than 180 days in advance."
             )
 
         return booking_date
+
+    def clean_number_of_people(self):
+        number = self.cleaned_data.get('number_of_people')
+
+        if number > 6:
+            raise forms.ValidationError(
+                "You cannot book more than 6 people."
+            )
+        if number < 1:
+            raise forms.ValidationError(
+                "You must book at least 1 person."
+            )
+        return number
 
 
 class EditBookingForm(forms.ModelForm):
@@ -77,6 +89,10 @@ class EditBookingForm(forms.ModelForm):
     - number_of_people
         Allows updating the number of people for the booking;
         selectable from 1 to 6.
+
+    **Validates:**
+
+    - `number_of_people` must be an integer between 1 and 6 inclusive.
 
     **Widgets:**
 
@@ -90,3 +106,12 @@ class EditBookingForm(forms.ModelForm):
                 choices=[(i, i) for i in range(1, 7)]
             ),
         }
+
+    def clean_number_of_people(self):
+        number = self.cleaned_data.get('number_of_people')
+
+        if number > 6:
+            raise forms.ValidationError(
+                "You cannot book more than 6 people."
+            )
+        return number
