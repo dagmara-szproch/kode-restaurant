@@ -58,7 +58,7 @@ class TestBookingForm(TestCase):
         booking_form = BookingForm({
             'booking_date': last_day,
             'time_slot': '12:00 PM - 1:30 PM',
-            'number_of_people': -1,
+            'number_of_people': 0,
             'special_requests': ''
             })
         self.assertFalse(booking_form.is_valid(), msg='Form is valid')
@@ -83,13 +83,13 @@ class TestBookingForm(TestCase):
 class TestEditBookingForm(TestCase):
     def test_form_is_invalid_with_less_than_one_people(self):
         edit_form = EditBookingForm({
-            'number_of_people': -1,
+            'number_of_people': 0,
             })
         self.assertFalse(edit_form.is_valid(), msg='Form is valid')
   
     def test_form_is_invalid_with_more_than_six_people(self):
         edit_form = EditBookingForm({
-            'number_of_people': 78,
+            'number_of_people': 7,
             })
         self.assertFalse(edit_form.is_valid(), msg='Form is valid')
 

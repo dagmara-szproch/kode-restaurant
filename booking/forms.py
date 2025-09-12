@@ -114,4 +114,8 @@ class EditBookingForm(forms.ModelForm):
             raise forms.ValidationError(
                 "You cannot book more than 6 people."
             )
+        if number < 1:
+            raise forms.ValidationError(
+                "You must book at least 1 people."
+            )
         return number
