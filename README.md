@@ -119,11 +119,15 @@ The aplication uses 2 main models: Restaurant and Booking.
 - [Django models/Unique constraint](https://docs.djangoproject.com/en/5.2/ref/models/constraints/#uniqueconstraint)
 - [Django widgets](https://docs.djangoproject.com/en/5.1/topics/forms/modelforms/#overriding-the-default-fields)
 - [Django aggregate()](https://docs.djangoproject.com/en/5.2/ref/models/expressions/#aggregate-expressions)
+- [Django clean()](https://docs.djangoproject.com/en/5.2/ref/forms/validation/#using-validation-in-practice)
 - [Flatpickr calendar](https://flatpickr.js.org/examples/)
 
 ## Testing
 
 ### Bugs
+
+1. **`booking_date` validation:** Previously, the booking form relied solely on Flatpickr fronted restrictions to prevent selecting today's date, past dates or more than 180 days in advance. users could bypass these rules by disabling JavaScript in their browser, potentially creating invalid bookings. Added server-side validation in `BookingForm` to ensure bookings are only allowed from tomorrow up to 180 days in advance, regardless of fronted controls.
+2. **`number_of_people` validation:** Previously, users could bypass the front-end dropdown and submit values greater than 6, which caused inconsistent behaviour and potential booking errors. Now bot the `BookingForm` and `EditBookingForm` strictly enforce the 1-6 range at the backend level.
 
 ### Unresolved Bugs
 
