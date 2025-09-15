@@ -20,7 +20,7 @@ def home(request):
     :template:`restaurant/restaurant_detail.html`
     """
     restaurant = Restaurant.objects.first()
-    carousel_images = restaurant.carousel_images.all()
+    carousel_images = restaurant.carousel_images.all().order_by('order', 'id')
     return render(request, 'restaurant/restaurant_detail.html', {
         'restaurant': restaurant,
         'carousel_images': carousel_images,
@@ -43,7 +43,7 @@ def restaurant_detail(request, slug):
     :template:`restaurant/restaurant_detail.html`
     """
     restaurant = get_object_or_404(Restaurant, slug=slug)
-    carousel_images = restaurant.carousel_images.all()
+    carousel_images = restaurant.carousel_images.all().order_by('order', 'id')
     return render(request, 'restaurant/restaurant_detail.html', {
         'restaurant': restaurant,
         'carousel_images': carousel_images,
