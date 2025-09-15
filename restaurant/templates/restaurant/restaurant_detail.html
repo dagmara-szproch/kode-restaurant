@@ -31,18 +31,20 @@
                             <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.caption|default:'Restaurant Image' }}">
                             {% if image.caption %}
                             <div class="carousel-caption">
-                                <p class="fs-6">{{ image.caption }}</p>
+                                <p class="fs-5">{{ image.caption }}</p>
                             </div>
                             {% endif %}
                         </div>
                         {% endfor %}
                     {% else %}
                         <div class="carousel-item active">
-                            <img src="{% static 'images/default.webp' %}"" class="d-block w-100" alt="Default restaurant image">
+                            <img src="{% static 'images/default.webp' %}" class="d-block w-100" alt="Default restaurant image">
                         </div>
                     {% endif %}
                 </div>
-
+                
+                <!-- Controls -->
+                {% if carousel_images %}
                 <button class="carousel-control-prev" type="button" data-bs-target="#restaurantCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -52,11 +54,13 @@
                     <span class="visually-hidden">Next</span>
                 </button>
 
+                <!-- Indicators -->
                 <div class="carousel-indicators">
                     {% for image in carousel_images %}
-                    <button type="button" data-bs-target="#restaurantCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+                    <button type="button" data-bs-target="#restaurantCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
