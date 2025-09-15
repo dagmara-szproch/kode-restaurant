@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxLengthValidator
 from cloudinary.models import CloudinaryField
 
 
@@ -14,7 +15,10 @@ class Restaurant(models.Model):
     city = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(blank=True, null=True)
-    description = models.TextField()
+    description = models.TextField(
+        validators=[MaxLengthValidator(255)],
+        help_text="Max 255 characters"
+    )
     is_active = models.BooleanField(default=True)
     table_capacity = models.PositiveIntegerField(default=80)
     online_capacity = models.PositiveIntegerField(default=50)
