@@ -49,11 +49,13 @@ class TestRestaurantViews(TestCase):
         self.assertIn('carousel_images', response.context)
         self.assertEqual(response.context['restaurant'], self.restaurant)
         self.assertListEqual(list(response.context['carousel_images']),
-                              [self.image1, self.image2])
-        
+                             [self.image1, self.image2])
+
     def test_restaurant_detail_view_with_valid_slug(self):
         """ Restaurant detail page loads correctly for a valid slug. """
-        response = self.client.get(reverse('restaurant_detail', args=['test-bistro']))
+        response = self.client.get(reverse(
+            'restaurant_detail', args=['test-bistro']
+            ))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'restaurant/restaurant_detail.html')
         self.assertContains(response, "Test Bistro")
@@ -63,22 +65,26 @@ class TestRestaurantViews(TestCase):
 
     def test_restaurant_detail_view_context_include_carousel(self):
         """ Restaurant detail context should include carousel images. """
-        response = self.client.get(reverse('restaurant_detail', args=['test-bistro']))
+        response = self.client.get(reverse(
+            'restaurant_detail', args=['test-bistro']
+            ))
         self.assertIn('restaurant', response.context)
         self.assertIn('carousel_images', response.context)
         self.assertEqual(response.context['restaurant'], self.restaurant)
         self.assertListEqual(
-            list(response.context['carousel_images']), [self.image1, self.image2])
+            list(response.context
+                 ['carousel_images']), [self.image1, self.image2])
 
     def test_restaurant_detail_view_Invalid_slug(self):
         """ Restaurant detail page should return 404 for invalid slug. """
-        response = self.client.get(reverse('restaurant_detail', args=['non-slug']))
+        response = self.client.get(reverse(
+            'restaurant_detail', args=['non-slug']))
         self.assertEqual(response.status_code, 404)
 
 
 class TestRestaurantModels(TestCase):
     """ Tests for Restaurant and CarouselImage models. """
-    
+
     def setUp(self):
         self.restaurant = Restaurant.objects.create(
             name="Test Bistro",
@@ -108,7 +114,9 @@ class TestRestaurantModels(TestCase):
         """Check default capacities for online and walk-in seats."""
         self.assertEqual(self.restaurant.online_capacity, 50)
         self.assertEqual(self.restaurant.table_capacity, 80)
-        self.assertEqual(self.restaurant.table_capacity - self.restaurant.online_capacity, 30)
+        self.assertEqual(
+            self.restaurant.table_capacity - self.restaurant.online_capacity,
+            30)
 
     def test_restaurant_str(self):
         """Check __str__ returns the restaurant name."""
