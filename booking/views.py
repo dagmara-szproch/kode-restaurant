@@ -39,7 +39,7 @@ def get_current_bookings(
         restaurant=restaurant,
         booking_date=booking_date,
         time_slot=time_slot,
-        status__in=[1, 3]
+        status=1
     )
 
     if exclude_booking:
