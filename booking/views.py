@@ -39,6 +39,7 @@ def get_current_bookings(
         restaurant=restaurant,
         booking_date=booking_date,
         time_slot=time_slot,
+        status__in=[1, 3]
     )
 
     if exclude_booking:
@@ -202,8 +203,7 @@ def edit_booking(request, pk):
                 booking.restaurant.online_capacity - current_bookings
             )
 
-            if (current_bookings + new_people
-                    > booking.restaurant.online_capacity):
+            if new_people > remaining_spots:
                 messages.error(
                     request,
                     "Cannot update booking due to capacity limits. "
@@ -224,7 +224,7 @@ def edit_booking(request, pk):
             messages.error(request,
                            "There was an error updating your booking. "
                            "Please check the form and try again.")
-       
+
         return redirect('my_bookings')
 
 
