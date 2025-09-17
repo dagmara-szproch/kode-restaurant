@@ -9,9 +9,12 @@
       <div class="card p-4 shadow-sm rounded">
         {% if restaurant %}
           <p class="text text-center mb-3">You are making a booking at <br>
-          <span class="brand-kode">Kode</span> 
+          <span class="brand-kode fs-2">Kode</span> 
           <span class="brand-restaurant">Restaurant</span>
-          <span class="restaurant-name">{{ restaurant.city }}</span>.</p>
+          <span class="restaurant-name fs-2">{{ restaurant.city }}</span>.</p>
+          <p class="small text-center">
+              You can book a table for tomorrow, up to <strong>6 people</strong>. For larger parties, please contact us at <strong>{{ restaurant.phone_number }}</strong> or <strong>{{ restaurant.email }}</strong>.
+          </p>
         {% else %}
           <p class="text mb-3">Please select a restaurant from the menu.</p>
         {% endif %}
