@@ -258,3 +258,90 @@ class TestMyBookings(TestCase):
         bookings = response.context["bookings"]
 
         self.assertTrue(all(b.user == self.user for b in bookings))
+
+
+class TestEditBooking(TestCase):
+
+    def setUp(self):
+        # Create user and login
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="password"
+        )
+        self.client.login(username="testuser", password="password")
+
+        # create restaurant
+        self.restaurant = Restaurant.objects.create(
+            name="Test Bistro",
+            slug="test-bistro",
+            address="123 Street",
+            city="Town",
+            phone_number="123456789",
+            online_capacity=4
+        )
+
+        # create a booking
+        self.booking_date = date.today() + timedelta(days=1)
+        self.booking = Booking.objects.create(
+            user=self.user,
+            restaurant=self.restaurant,
+            booking_date=self.booking_date,
+            time_slot='12:00 PM - 1:30 PM',
+            number_of_people=2,
+            status=1
+        )
+
+        # store edit_booking URL for reuse
+        self.url = reverse('edit_booking', args=[self.booking.pk])
+
+    def test_edit_booking_get_redirects(self):
+        """
+        GET request should redirect to my_bookings
+        (since form in inline).
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('my_bookings'))
+
+    def test_edit_booking_post_success(self):
+        """ POST with valid number_of_people should update booking. """
+        response = self.client.post(
+            self.url,
+            {'number_of_people': 4},
+            follow=True
+        )
+        self.booking.refresh_from_db()
+        self.assertEqual(self.booking.number_of_people, 4)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any(
+            "updated successfully" in str(m) for m in messages
+            )
+        )
+
+    def test_edit_booking_over_capacity(self):
+        """ POST exceeding restaurant capacity should show error. """
+        other_user = User.objects.create_user(
+            username="other",
+            password="password"
+        )
+        Booking.objects.create(
+            user=other_user,
+            restaurant=self.restaurant,
+            booking_date=self.booking_date,
+            time_slot='12:00 PM - 1:30 PM',
+            number_of_people=2,
+            status=1
+        )
+
+        response = self.client.post(self.url,
+                                    {'number_of_people': 3},
+                                    follow=True
+                                    )
+        self.booking.refresh_from_db()
+        self.assertEqual(self.booking.number_of_people, 2)
+
+        messages = list(response.context['messages'])
+        self.assertTrue(any(
+            "Cannot update booking due to capacity" in str(m) for m in messages
+            )
+        )
