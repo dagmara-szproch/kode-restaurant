@@ -28,8 +28,9 @@
                   <tr>
                     <th scope="col">Date</th>
                     <th scope="col">Time</th>
-                    <th class="d-none d-md-table-cell" scope="col">Restaurant</th>
+                    <th scope="col">Restaurant</th>
                     <th scope="col">Guests</th>
+                    <th scope="col">Request</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -38,8 +39,9 @@
                   <tr id="booking{{ booking.id }}" data-booking-id="{{ booking.id }}">
                     <td>{{ booking.booking_date }}</td>
                     <td>{{ booking.time_slot }}</td>
-                    <td class="d-none d-md-table-cell">{{ booking.restaurant.city }}</td>
+                    <td>{{ booking.restaurant.city }}</td>
                     <td><span id="people{{ booking.id }}">{{ booking.number_of_people }}</span></td>
+                    <td>{{ booking.special_requests }}</td>
                     <td>
                       <div class="mb-2">
                       {% if booking.status == 1 %}
@@ -76,7 +78,8 @@
                   <p class="card-text">
                     <strong>Date:</strong> {{ booking.booking_date }}<br>
                     <strong>Time:</strong> {{ booking.time_slot }}<br>
-                    <strong>Guests:</strong> {{ booking.number_of_people }}
+                    <strong>Guests:</strong> {{ booking.number_of_people }}<br>
+                    <strong>Request:</strong> {{ booking.special_requests }}
                   </p>
                   <div class="mb-2">
                     {% if booking.status == 1 %}

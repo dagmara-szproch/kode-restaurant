@@ -6,12 +6,11 @@
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
-
 <div class="container">
     <div class="row justify-content-center mt-5">
-        <div class="col-12 col-sm-10 col-md8">
-            <div class="card p-4 m-3 shadow-sm rounded">
-                <h3 class="text-center mb-3">{% trans "Sign In" %}</h3>
+        <div class="col-12 col-sm-10 col-md-8">
+            <div class="card p-4 shadow-sm rounded">
+                <h3 class="text-center mb-3 fw-bold">{% trans "Sign In" %}</h3>
                 <p class="text text-center">
                     {% blocktrans %}Welcome to Kode Restaurant! To book a table, please log in to your account. Don’t have one yet? Simply <a class="link" href="{{ signup_url }}">sign up</a>
                     to get started.{% endblocktrans %}</p>
@@ -27,4 +26,4 @@
         </div>
     </div>
 </div>
-{% endblock %}s
+{% endblock %}

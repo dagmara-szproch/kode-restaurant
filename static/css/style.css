@@ -12,10 +12,18 @@
 /* Global styles */
 
 /* Restaurant logo/name */
-.brand-kode {
+.brand-kode, 
+.brand-kode-2 {
     font-family: var(--font-kode);
     font-size: 1.5rem;
     font-weight: bold;
+}
+
+.brand-kode {
+    color: var(--secondary-color);
+}
+
+.brand-kode-2 {
     color: var(--primary-color);
 }
 
@@ -35,9 +43,14 @@ body {
 }
 
 /* Headings, navbar and footer */
-h1, h2, h3 {
+h1{
     font-family: var(--font-headings);
     color: var(--primary-color);
+}
+
+h2, h3 {
+    font-family: var(--font-headings);
+    color: var(--secondary-color)
 }
 
 #navbar,
@@ -94,8 +107,8 @@ footer a:hover,
 }
 
 .btn-book-table {
-    background-color: var(--primary-color);
-    color: var(--navbar-color);
+    background-color: var(--navbar-color);
+    color: var(--secondary-color);
     border: none;
     padding: 10px 20px;
     font-size: 1.2rem;
