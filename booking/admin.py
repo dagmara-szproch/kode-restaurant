@@ -26,16 +26,35 @@ class BookingAdmin(admin.ModelAdmin):
     - Ordering defaults to most recent bookings.
     """
     list_display = ('user',
-                    'restaurant',
+                    'restaurant_city',
                     'booking_date',
                     'time_slot',
-                    'number_of_people',
+                    'num_people',
                     'get_status',
-                    'spots_left')
-    list_filter = ('restaurant', 'status', 'booking_date')
+                    'spots_left',
+                    'short_request'
+                    )
+    list_filter = ('restaurant__city', 'status', 'booking_date')
     search_fields = ('user__username', 'restaurant__name', 'special_requests')
     ordering = ('-booking_date', '-time_slot')
 
+    def num_people(self, obj):
+        return obj.number_of_people
+    num_people.short_description = 'Guests'
+
+    def restaurant_city(self, obj):
+        return obj.restaurant.city
+    restaurant_city.short_description = 'City'
+
+    def short_request(self, obj):
+        if not obj.special_requests:
+            return "-"
+        return (
+            obj.special_requests[:20]
+            + ("..." if len(obj.special_requests) > 20 else "")
+        )
+    short_request.short_description = 'Request'
+    
     def get_status(self, obj):
         """
         Return the human-readable booking status.
