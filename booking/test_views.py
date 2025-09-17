@@ -345,3 +345,76 @@ class TestEditBooking(TestCase):
             "Cannot update booking due to capacity" in str(m) for m in messages
             )
         )
+
+
+class TestCancelBooking(TestCase):
+
+    def setUp(self):
+        # Create users
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="password"
+        )
+        self.other_user = User.objects.create_user(
+            username="other",
+            password="password"
+        )
+        self.client.login(username="testuser", password="password")
+
+        # create restaurant
+        self.restaurant = Restaurant.objects.create(
+            name="Test Bistro",
+            slug="test-bistro",
+            address="123 Street",
+            city="Town",
+            phone_number="123456789",
+            online_capacity=4
+        )
+
+        # create a booking
+        self.booking_date = date.today() + timedelta(days=1)
+        self.booking = Booking.objects.create(
+            user=self.user,
+            restaurant=self.restaurant,
+            booking_date=self.booking_date,
+            time_slot='12:00 PM - 1:30 PM',
+            number_of_people=2,
+            status=1
+        )
+
+        # store edit_booking URL for reuse
+        self.url = reverse('cancel_booking', args=[self.booking.pk])
+
+    def test_cancel_booking_success(self):
+        """
+        Cancelling own booking sets status to 'Cancelled'
+        and shows a success message.
+        """
+        response = self.client.post(self.url, follow=True)
+
+        self.booking.refresh_from_db()
+        self.assertEqual(self.booking.status, 2)
+        self.assertRedirects(response, reverse('my_bookings'))
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("cancelled" in str(m) for m in messages))
+
+    def test_cancel_booking_other_user(self):
+        """
+        User cannot cancel another user’s booking;
+        booking remains unchanged and 404 returned.
+        """
+        other_booking = Booking.objects.create(
+            user=self.other_user,
+            restaurant=self.restaurant,
+            booking_date=self.booking_date,
+            time_slot="12:00 PM - 1:30 PM",
+            number_of_people=1,
+            status=1
+        )
+        url = reverse('cancel_booking', args=[other_booking.pk])
+        response = self.client.post(url, follow=True)
+
+        other_booking.refresh_from_db()
+        self.assertEqual(other_booking.status, 1)
+        self.assertEqual(response.status_code, 404)
