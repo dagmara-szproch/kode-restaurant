@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'restaurant',
     'booking',
+    'csp',
 ]
 
 SITE_ID = 1
@@ -71,6 +72,14 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }
+
+CONTENT_SECURITY_POLICY = {'DIRECTIVES': {'default-src': ("'self'",),
+                'font-src': ("'self'", 'https://fonts.gstatic.com', 'data:'),
+                'img-src': ("'self'", 'https://res.cloudinary.com'),
+                'script-src': ("'self'", 'https://cdn.jsdelivr.net'),
+                'style-src': ("'self'",
+                              'https://fonts.googleapis.com',
+                              "'unsafe-inline'")}}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -123,7 +132,6 @@ if 'test' in sys.argv:
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
-CLOUDINARY_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.codeinstitute-ide.net/",
