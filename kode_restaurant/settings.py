@@ -35,7 +35,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1',]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -55,7 +54,6 @@ INSTALLED_APPS = [
     'cloudinary',
     'restaurant',
     'booking',
-    'csp',
 ]
 
 SITE_ID = 1
@@ -72,14 +70,6 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }
-
-CONTENT_SECURITY_POLICY = {'DIRECTIVES': {'default-src': ("'self'",),
-                'font-src': ("'self'", 'https://fonts.gstatic.com', 'data:'),
-                'img-src': ("'self'", 'https://res.cloudinary.com'),
-                'script-src': ("'self'", 'https://cdn.jsdelivr.net'),
-                'style-src': ("'self'",
-                              'https://fonts.googleapis.com',
-                              "'unsafe-inline'")}}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
