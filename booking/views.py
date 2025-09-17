@@ -227,6 +227,8 @@ def edit_booking(request, pk):
 
         return redirect('my_bookings')
 
+    return redirect('my_bookings')
+
 
 # Cancel booking
 @login_required
