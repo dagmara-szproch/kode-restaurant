@@ -126,8 +126,12 @@ The aplication uses 2 main models: Restaurant and Booking.
 
 ### Bugs
 
+  **Resolved bugs** found during automated testing:
+
 1. **`booking_date` validation:** Previously, the booking form relied solely on Flatpickr fronted restrictions to prevent selecting today's date, past dates or more than 180 days in advance. users could bypass these rules by disabling JavaScript in their browser, potentially creating invalid bookings. Added server-side validation in `BookingForm` to ensure bookings are only allowed from tomorrow up to 180 days in advance, regardless of fronted controls.
 2. **`number_of_people` validation:** Previously, users could bypass the front-end dropdown and submit values greater than 6, which caused inconsistent behaviour and potential booking errors. Now bot the `BookingForm` and `EditBookingForm` strictly enforce the 1-6 range at the backend level.
+3. The helper function in booking views **`get_current_bookings`** previously included cancelled bookings (status=2) when counting current reservations, causing checks to be incorect. Updated the helper function to only include bookings with `status=1` (confirmed) when checking current capacity.
+4. **`edit_booking`** view now returns an `HttpResponse` for GET request. Previously, accessing the view via GET caused a server error because it returned `None`.
 
 ### Unresolved Bugs
 
@@ -166,12 +170,14 @@ The aplication uses 2 main models: Restaurant and Booking.
 
 ### Media
 
-1. [Pixabay](https://pixabay.com/):
-- [image for carousel 1](https://pixabay.com/photos/soup-dish-food-meal-5726677/)
-- [image for carousel 2](https://pixabay.com/photos/chicken-asian-cuisine-food-7249270/)
-- [image for carousel 3](9https://pixabay.com/photos/pasta-penne-italian-food-7475756/)
-- [image for carousel 4](https://pixabay.com/photos/ramen-soup-dinner-noodles-egg-7187812/)
-- [image for carousel 5](https://pixabay.com/photos/curry-food-dish-meal-cuisine-7249247/)
-- [image for carousel 6](https://pixabay.com/photos/tofu-soup-appetizer-food-7249297/)
+1. [Pixabay](https://pixabay.com/): Images for carousel:
+- [image for carousel 1](https://pixabay.com/photos/soup-dish-food-meal-5726677/) soup
+- [image for carousel 2](https://pixabay.com/photos/chicken-asian-cuisine-food-7249270/) chicken
+- [image for carousel 3](9https://pixabay.com/photos/pasta-penne-italian-food-7475756/) pasta
+- [image for carousel 4](https://pixabay.com/photos/ramen-soup-dinner-noodles-egg-7187812/) ramen
+- [image for carousel 5](https://pixabay.com/photos/curry-food-dish-meal-cuisine-7249247/) curry
+- [image for carousel 6](https://pixabay.com/photos/tofu-soup-appetizer-food-7249297/) tofu
 
-- [image for background](https://pixabay.com/illustrations/texture-pattern-vintage-watercolor-8637095/)
+- [image for background](https://pixabay.com/illustrations/texture-pattern-vintage-watercolor-8637095/) Image for background
+
+2. [dbdiagram](https://dbdiagram.io/home) to draw Entity-Relationship Diagram.
