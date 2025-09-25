@@ -8,9 +8,10 @@
     - [User Stories](#user-stories)
     - [Design Choices](#design-choices)
     - [Wireframes](#wireframes)
-- [Data Model](#data-model)    
-- [Features](#features)
+- [Data Model & Relationships](#data-model--relationships)    
+- [Booking flowchart](#booking-flowchart)
 - [Technologies Used](#technologies-used)
+- [Resources & Tools](#resources--tools)
 - [Code](#code)
 - [Testing](#testing)
     - [Bugs](#bugs)
@@ -83,9 +84,21 @@ The project's Kanban Board can be viewd [here](https://github.com/users/dagmara-
 
 #### Fonts
 
-#### Icons
+For the branding of Kode Restaurant, I combined typefaces: **Libertinus Keyboard** is used for "Kode" <img src="docs/font-kode.png" alt="Kode logo snippet" width="120"> and **Audiowide** for the word "Restaurant" <img src="docs/font-restaurant.png" alt="Restaurant logo snippet" width="120">. For the main content, **Mulish** is applied to body text due to its clean and readable design <img src="docs/font-body.png" alt="Body font snippet" width="120">, while **Poppins** is used for headings (h1, h2, h3) to create clear hierarchy and emphasis <img src="docs/font-headings.png" alt="Headings font snippet" width="120">.
 
-#### Images
+#### Colours
+
+The following colours are used consistently across the Kode Restaurant project:
+
+| Purpose | Colour | Hex | Preview |
+|---------|--------|-----|---------|
+| Navbar & Footer background, form background, font on dark background (landing page) | Light Green | `#eff5e4` | <span style="background-color:#eff5e4; padding:6px 24px; border:1px solid #000;">&nbsp;</span> |
+| Fonts on light background | Brown | `#5e4b31` | <span style="background-color:#5e4b31; color:white; padding:6px 24px; display:inline-block;">Aa</span> |
+| Headings (H1) on dark/transparent landing page background | Gold | `#bb8726` | <span style="background-color:#bb8726; color:white; padding:6px 24px; display:inline-block;">Aa</span> |
+| Button: Confirmed | Green | `#057820e6` | <span style="background-color:#057820e6; color:white; padding:6px 24px; display:inline-block;">✔</span> |
+| Button: Cancelled | Orange | `#c16d07` | <span style="background-color:#c16d07; color:white; padding:6px 24px; display:inline-block;">✖</span> |
+| Button: Completed | Grey | `#6c757d` | <span style="background-color:#6c757d; color:white; padding:6px 24px; display:inline-block;">✔</span> |
+
 
 ### Wireframes
 
@@ -99,28 +112,101 @@ The project's Kanban Board can be viewd [here](https://github.com/users/dagmara-
   <img src="docs/book-template.png" alt="book template" width="600"/>
 </p>
 
-## Data Model
+## Data Model & Relationships
 
-The aplication uses 2 main models: Restaurant and Booking. 
-- The Restaurant model represents a restauration location and stores all key bussines information. **Relationship:** One restaurant can have many bookings.
-- The Booking model represents a customer's reservation. Bookings are only available to register users. **Constraints:** User cannot double book the same restaurant, date, and time slot.
+The aplication uses Django's **default `User` model** for authentication (username nad password required, email optional).
+
+On the top of this, three custom models manage the restaurant system:
+
+
+**1. Restaurant**
+- Represents a restaurant with basic details, contact information and capacity limits
+- Has a **one-to-many relationship** with:
+  - `RestaurantCarouselImage` ( a restaurant can have multiple carousel images)
+  - `Booking` (a restaurant can recive many bookings)
+
+
+**2. RestaurantCarouselImage**
+- Each image belongs to a single restaurant (`ForeignKey` to `Restaurant`)
+- If the restaurant is deleted, all associated images are also deleted (`on_delete=models.CASCADE`)
+- Relationship: **Many-to-one** (Many images per one restaurant)
+
+
+**3. Booking**
+- Links a user (`ForeignKey` to `User`) with a restaurant (`ForeignKey` to `Restaurant`)
+- Each booking includes date, time slot, number of people, and optional special requests
+- Relationships: **Many-to-one**
+  - `User` (one user can make multiple bookings)
+  - `Restaurant` (one restaurant can receive multiple bookings)
+- The **unique constraint** ensures a user cannot double-book the same restaurant at the same date and time (for confirmed bookings). Cancelled bookings can be replaced.
 
 <h3>Entity Relationship Diagram</h3>
 <p>
   <img src="docs/erd.png" alt="ERD for Restaurant Booking System" width="600"/>
 </p>
 
-## Features
+## Booking flowchart
+
+<h3>Booking flowchart</h3>
+<p>
+  <img src="docs/booking flowchart.png" alt="Booking flowchart" width="300"/>
+</p>
 
 ## Technologies Used
 
+**1. Languages:**
+- Python - the core programming language used to build the application.
+- HTML5 - the standard markup language for structuring content on the web.
+- CSS3 - used to style the website with custom layouts, colours, and fonts.
+- JavaScript - added interactivity and client-side behaviour.
+
+**2. Frameworks & Libraries:**
+- Django - the main web framework used to manage models, views, templates, authentication, and admin functionality.
+- Bootstrap 5 - responsive frontend framework for layout, forms, and components.
+- Django Allauth - user authentication, signup, and login with social account support.
+- Django Crispy Forms - improves form rendering and styling in templates.
+- Crispy-Bootstrap5 - crispy-forms theme integration with Bootstrap 5.
+- Cloudinary - cloud service for storing and optimising images.
+- dj3-cloudinary-storage - Django storage backend for Cloudinary.
+
+**3. Database & Deployment:**
+- PostgreSQL - relational database used in production.
+- psycopg2 - PostgreSQL database adapter for Python/Django.
+- Gunicorn - Python WSGI HTTP server for running Django apps in production.
+- Whitenoise – serves static files efficiently in Django without extra servers.
+- dj-database-url – allows database configuration via environment variables (useful for deployment).
+- [Heroku](https://www.heroku.com/) - platform-as-a-service (PaaS) used to deploy, manage, and scale the live application.
+
+**Version Control:**
+- Git – version control system to track and manage code changes.
+- GitHub – remote repository hosting, project board, and collaboration tool.
+
+**Design & Fonts:**
+- [Google Fonts](https://fonts.google.com/) to import fonts.
+
+## Resources & Tools
+
+- [dbdiagram](https://dbdiagram.io/home) to draw Entity-Relationship Diagram.
+- [Birme](https://www.birme.net/) to resize, crop, compress and change the image format to WEBP.
+- [Contrast Checker](https://webaim.org/resources/contrastchecker/) to check the contrast between colours.
+- [Pixabay](https://pixabay.com/) as a source of backround and carousel images.
+- [Open AI](https://openai.com/chatgpt/overview/) to create / review the content for spelling, grammar and consistency.
+- [CSS Validator](https://jigsaw.w3.org/css-validator/) to validate CSS
+- [HTML Validator](https://validator.w3.org/) to validate HTML
+- Lighthouse Chrome Dev Tools for performance and accessibility testing.
+- [Am I responsive](https://ui.dev/amiresponsive) for mock ups preview.
+
 ## Code
 
-- [Django models/Unique constraint](https://docs.djangoproject.com/en/5.2/ref/models/constraints/#uniqueconstraint)
-- [Django widgets](https://docs.djangoproject.com/en/5.1/topics/forms/modelforms/#overriding-the-default-fields)
-- [Django aggregate()](https://docs.djangoproject.com/en/5.2/ref/models/expressions/#aggregate-expressions)
-- [Django clean()](https://docs.djangoproject.com/en/5.2/ref/forms/validation/#using-validation-in-practice)
-- [Flatpickr calendar](https://flatpickr.js.org/examples/)
+**Learning resources**
+1. **Walkthrough Project:** The code used in my project was based on the “Django Blog” walkthrough project provided by Code Institute. This helped me understand the structure of a Django app, including models, views, templates, and URL routing.
+2. **Django Documentation:** I referred to the official Django documentation to extend the project beyond the walkthrough. I explored:
+- [Django models/Unique constraint](https://docs.djangoproject.com/en/5.2/ref/models/constraints/#uniqueconstraint) UniqueConstraint lets you enforce rules at the database level to prevent duplicate records. In my app, it ensures that the same user cannot double-book the same restaurant, date, and time slot (unless the previous booking was cancelled).
+- [Django widgets](https://docs.djangoproject.com/en/5.1/topics/forms/modelforms/#overriding-the-default-fields) Widgets define how form fields are rendered in HTML. For example, using a date picker is controlled via widgets. They make forms more user-friendly and customisable without altering backend logic.
+- [Django aggregate()](https://docs.djangoproject.com/en/5.2/ref/models/expressions/#aggregate-expressions) Used to calculate values like totals, counts, or averages across querysets. Example: I used aggregate(Sum('number_of_people')) to work out how many people had already booked for a given restaurant and time slot.
+- [Django clean()](https://docs.djangoproject.com/en/5.2/ref/forms/validation/#using-validation-in-practice) A method for validating model or form data before saving. It allows writing custom rules (e.g., preventing more than 6 guests per user booking).
+3. **Flatpickr Calendar:**
+- [Flatpickr calendar](https://flatpickr.js.org/examples/) A lightweight JavaScript date/time picker library. I used it to improve the booking form so users can easily select dates and times instead of typing them manually. It provides features like disabling past dates, choosing formats, and enhancing user experience.
 
 ## Testing
 
@@ -179,5 +265,3 @@ The aplication uses 2 main models: Restaurant and Booking.
 - [image for carousel 6](https://pixabay.com/photos/tofu-soup-appetizer-food-7249297/) tofu
 
 - [image for background](https://pixabay.com/illustrations/texture-pattern-vintage-watercolor-8637095/) Image for background
-
-2. [dbdiagram](https://dbdiagram.io/home) to draw Entity-Relationship Diagram.
