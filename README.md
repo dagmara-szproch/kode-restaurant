@@ -1,5 +1,9 @@
 ﻿# kode-restaurant
-[View the Live Project here](https://kode-restaurant-5f9020dc3f3d.herokuapp.com/)
+<p>
+  <img src="docs/kode_screenshot.webp" alt="Kode Restaurant screenshot" width="600"/>
+</p>
+
+**[View the Live Project here](https://kode-restaurant-5f9020dc3f3d.herokuapp.com/)**
 
 # Table of Content
 - [User Expeience](#user-experience)
@@ -15,7 +19,7 @@
 - [Code](#code)
 - [Testing](#testing)
     - [Bugs](#bugs)
-    - [Unresolved Bugs](#unresolved-bugs)
+    - [Unresolved Bugs](#unresolved-bugs--warnings)
     - [Tesing User Stories](#testing-user-stories)
     - [Manual Testing](#manual-testing)
     - [Automated Testing](#automated-testing)
@@ -78,7 +82,7 @@ The restaurant aims to improve customer experience and streamline operations by 
 
 4. Add/Manage Restaurants (Future): As an admin, I want to add new restaurant locations, so that the business can expand without changing the system.
 
-The project's Kanban Board can be viewd [here](https://github.com/users/dagmara-szproch/projects/11)
+**The project's Kanban Board can be viewd [here](https://github.com/users/dagmara-szproch/projects/11)**
 
 ### Design Choices
 
@@ -194,7 +198,6 @@ On the top of this, three custom models manage the restaurant system:
 - [CSS Validator](https://jigsaw.w3.org/css-validator/) to validate CSS
 - [HTML Validator](https://validator.w3.org/) to validate HTML
 - Lighthouse Chrome Dev Tools for performance and accessibility testing.
-- [Am I responsive](https://ui.dev/amiresponsive) for mock ups preview.
 
 ## Code
 
@@ -219,11 +222,41 @@ On the top of this, three custom models manage the restaurant system:
 3. The helper function in booking views **`get_current_bookings`** previously included cancelled bookings (status=2) when counting current reservations, causing checks to be incorect. Updated the helper function to only include bookings with `status=1` (confirmed) when checking current capacity.
 4. **`edit_booking`** view now returns an `HttpResponse` for GET request. Previously, accessing the view via GET caused a server error because it returned `None`.
 
-### Unresolved Bugs
+### Unresolved Bugs / Warnings
+
+**Mixed Content Warnings (HTTPS vs HTTP)**
+
+Some images loaded from Cloudinary were initially requested over HTTP instead of HTTPS. Modern browsers automatically upgrade these requests to HTTPS, so the site functions correctly.
+
+Impact: No visible functional issues for users. All content is served securely.
+
+![Warning console](docs/warning_console.png)
+
+**Lighthouse Best Practices**
+
+Lighthouse flags “Does not use HTTPS – 3 insecure requests found” due to the same images initially being HTTP. Again, these requests are automatically upgraded by browsers, so there is no risk to users.
+
+Resolution: All images are loaded securely at runtime. No action required for the current deployment.
+
+![Warning lighthouse](docs/warning_lighthouse.png)
 
 ### Testing User Stories
 
+**Testing Note:** All client-side user stories were verified using automated Django tests to ensure proper functionality, validation, and error handling: [restaurant view tests](restaurant/test_views.py) / [booking forms tests](booking/test_forms.py) / [booking views tests](booking/test_views.py). Admin-related actions, such as creating, editing, and deleting bookings, were tested manually through the Django Admin interface. Screenshots are included where relevant to illustrate the functionality.
+
+
+| User / Role | User Story                         | Acceptance Criteria                                                                                                                | Testing Method                                                          | Result / Screenshot                                                                                                 |
+| ----------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Client      | Book a Table Online                | - Select date (next day or later)<br>- Choose time slot<br>- Choose number of guests (max 6)<br>- See booking confirmation         | Django automated tests + manual check of form and confirmation messages |  Passed. Error messages shown when over capacity or double-booked.<br>![Booking form](docs/booking_form.png)                     |
+| Client      | Edit a Booking                     | - Edit only own future bookings<br>- Cannot exceed restaurant capacity<br>- Changes reflected in summary                           | Django automated tests + manual form check                              |  Passed. Over-capacity edits rejected, valid edits updated correctly.<br>![Edit booking](docs/edit_booking.png) |
+| Client      | Cancel a Booking                   | - Cancel future bookings<br>- Status changes to "Cancelled"<br>- Cannot cancel other users’ bookings<br>- See confirmation message | Django automated tests + manual check                                   |  Passed. Cancelled bookings marked correctly.<br>![Cancel booking](docs/delete_booking.png)                     |
+| Admin       | Create Booking on Behalf of Client | - Select client, date, time, party size<br>- Respect online capacity                                                               | Manual via Django Admin                                                 |  Passed. Booking created successfully.                                                                             |
+| Admin       | Edit / Delete Booking              | - Update date, time, number of people<br>- Delete bookings                                                                         | Manual via Django Admin                                                 |  Passed. Changes reflected immediately; deleted bookings removed.                                                  |
+
+
 ### Manual Testing
+
+**Testing note:** Most of the core functionality (booking flows, validation, capacity limits) is tested via automated Django tests. The following manual tests focus on UI, admin interface, and edge cases that require visual verification.
 
 | ID | Test Description | Expected Result | Actual Result | Pass/Fail |
 |----|------------------|-----------------|---------------|-----------|
@@ -248,11 +281,37 @@ On the top of this, three custom models manage the restaurant system:
 
 ## Deployment
 
+The website was deployed to Heroku and can be found **[here](https://kode-restaurant-5f9020dc3f3d.herokuapp.com/)**.
+
+- Heroku is a cloud platform that lets developers create, deploy, monitor and manage apps.
+- You will need a Heroku log-in to be able to deploy a website to Heroku.
+- Once you have logged into Heroku:
+- Click 'New' > 'Create new app'
+- Choose a unique name, choose your region and press 'Create app'
+- Click on 'Settings' and then 'Reveal Config Vars'
+- Add a key of 'DISABLE_COLLECTSTATIC' with a value of '1'.
+- Add a key of 'DATABASE_URL' - the value will be the URL you were emailed when creating your database.
+- Add a key of 'SECRET_KEY' - the value will be any random secret key (google 'secret key generator' and use it to generate a random string of numbers, letters and characters)
+- In your terminal, type the code you will need to install project requirements:
+  - pip3 install gunicorn~=20.1
+  - pip3 install -r requirements.txt
+  - pip3 freeze --local > requirements.txt
+- Create an 'env.py' file at the root directory which contains the following:
+  - import os
+  - os.environ["DATABASE_URL"]='CI database URL'
+  - os.environ["SECRET_KEY"]=" Your secret key"
+- Create a file at the root directory called Procfile. In this file enter: "web: gunicorn my_project.wsgi" (without the quotes)
+- In settings.py, set DEBUG to False.
+- YOU SHOULD ALWAYS SET DEBUG TO FALSE BEFORE DEPLOYING FOR SECURITY
+- Add ",'.herokuapp.com' " (without the double quotes) to the ALLOWED_HOSTS list in settings.py
+- Add, commit and push your code.
+- Go back to Heroku, click on the 'Deploy' tab.
+- Connect your project to GitHub.
+- Scroll to the bottom and click 'Deploy Branch' and your project will be deployed!
+
 ## Maintenance & Updates
 
 ## Credits
-
-### Content
 
 ### Media
 
