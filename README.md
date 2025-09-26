@@ -194,10 +194,10 @@ On the top of this, three custom models manage the restaurant system:
 - [Birme](https://www.birme.net/) to resize, crop, compress and change the image format to WEBP.
 - [Contrast Checker](https://webaim.org/resources/contrastchecker/) to check the contrast between colours.
 - [Pixabay](https://pixabay.com/) as a source of backround and carousel images.
-- [Open AI](https://openai.com/chatgpt/overview/) to create / review the content for spelling, grammar and consistency.
-- [CSS Validator](https://jigsaw.w3.org/css-validator/) to validate CSS
-- [HTML Validator](https://validator.w3.org/) to validate HTML
-- [JS Hint Validator](https://jshint.com/)
+- [Open AI](https://openai.com/chatgpt/overview/) to create / review the content for spelling, grammar and consistency; to ask for suggestions on how to solve certain problems.
+- [CSS Validator](https://jigsaw.w3.org/css-validator/) to validate CSS.
+- [HTML Validator](https://validator.w3.org/) to validate HTML.
+- [JS Hint Validator](https://jshint.com/) to validate JavaScript.
 - Lighthouse Chrome Dev Tools for performance and accessibility testing.
 
 ## Code
@@ -304,8 +304,35 @@ Resolution: All images are loaded securely at runtime. No action required for th
 
 5. **Lighthouse** (Chrome DevTools):
 
+![desktop booking form](docs/lighthouse/lig-d-bform.png)
+
+![mobile booking form](docs/lighthouse/lig-m-bform.png)
+
+![desktop home](docs/lighthouse/lig-d-home.png)
+
+![mobile home](docs/lighthouse/lig-m-home.png)
+
+![desktop register](docs/lighthouse/lig-d-register.png)
+
+![mobile register](docs/lighthouse/lig-m-register.png)
+
+![desktop my bookings](docs/lighthouse/lig-d-bookings.png)
+
+![mobile my bookings](docs/lighthouse/lig-m-bookings.png)
 
 ### Accessibility
+
+- All templates use semantic HTML structure (headings, lists, forms) to support screen readers.
+
+- Interactive elements such as buttons and links include descriptive text rather than icons alone.
+
+- Colour contrast was checked to ensure text is readable against background colours.
+
+- Forms use proper `<label>` tags linked to inputs, improving accessibility for assistive technologies.
+
+- ARIA roles and attributes were added where necessary (e.g. navigation landmarks).
+
+- The site is fully navigable with a keyboard (tab order tested).
 
 ## Deployment
 
@@ -338,6 +365,13 @@ The website was deployed to Heroku and can be found **[here](https://kode-restau
 - Scroll to the bottom and click 'Deploy Branch' and your project will be deployed!
 
 ## Maintenance & Updates
+
+1. **User model improvements:** Replace the username field with name and surname, make email required so booking confirmations can be sent, and add a phone number field to support SMS notifications.
+2. **Menu app:** Create a new dedicated app for managing the restaurant menu, with sections such as lunch menu, dinner menu, and special offers.
+3. **Improved UX/UI:** Make the website more colourful and engaging, with better use of visuals and immersive design elements.
+4. **Enhanced admin and staff tools:** Extend the admin interface with more intuitive views for managing bookings, menus, and users to improve workflow efficiency.
+5. **Reviews and ratings:** Let customers leave feedback about their dining experience.
+6. **Performance improvements:** Optimise images and resources further for faster mobile loading.
 
 ## Credits
 
