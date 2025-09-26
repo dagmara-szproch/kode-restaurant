@@ -147,7 +147,8 @@ footer a:hover,
 .logout button,
 .signup button,
 .book-btn,
-.cancel-btn {
+.cancel-btn,
+.btn-back {
     background-color: var(--secondary-color);
     color: var(--navbar-color);
     border: none;
