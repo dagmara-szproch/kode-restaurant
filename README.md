@@ -197,6 +197,7 @@ On the top of this, three custom models manage the restaurant system:
 - [Open AI](https://openai.com/chatgpt/overview/) to create / review the content for spelling, grammar and consistency.
 - [CSS Validator](https://jigsaw.w3.org/css-validator/) to validate CSS
 - [HTML Validator](https://validator.w3.org/) to validate HTML
+- [JS Hint Validator](https://jshint.com/)
 - Lighthouse Chrome Dev Tools for performance and accessibility testing.
 
 ## Code
@@ -221,6 +222,7 @@ On the top of this, three custom models manage the restaurant system:
 2. **`number_of_people` validation:** Previously, users could bypass the front-end dropdown and submit values greater than 6, which caused inconsistent behaviour and potential booking errors. Now bot the `BookingForm` and `EditBookingForm` strictly enforce the 1-6 range at the backend level.
 3. The helper function in booking views **`get_current_bookings`** previously included cancelled bookings (status=2) when counting current reservations, causing checks to be incorect. Updated the helper function to only include bookings with `status=1` (confirmed) when checking current capacity.
 4. **`edit_booking`** view now returns an `HttpResponse` for GET request. Previously, accessing the view via GET caused a server error because it returned `None`.
+5. **Inconsistent form rendering in authentication pages:** The initial `Sign Up` and `Sign In` templates used `{{ form.as_p }}`, which resulted in inconsistent styling and invalid HTML output. This caused layout issues and validation error in the HTML Validator. Replaced `{{ form.as_p }}` with `crispy-forms` rendering, ensuring consistent Bootstrap styling and clean HTML across all forms.
 
 ### Unresolved Bugs / Warnings
 
@@ -276,6 +278,32 @@ Resolution: All images are loaded securely at runtime. No action required for th
 | 14 | Login with wrong credentials - Go to the Login page, enter a wrong username or wrong password, submit the form | User is not logged in, an error message is displayed | User is not logged in and  "The username and/or password you specified are not correct." message is displayed | Pass |
 
 ### Automated Testing
+
+1. **Unit and integration tests** were written for core functionality. Their results are documented in the **Testing User Stories**.
+2. **HTML Validator** (W3C):
+
+![booking form](docs/validation/val_booking-form.png)
+
+![landing page](docs/validation/val_landing.png)
+
+![login page](docs/validation/val_login.png)
+
+![sign up](docs/validation/val_signup.png)
+
+![logout](docs/validation/val_logout.png)
+
+![my-bookings](docs/validation/val_my-bookings.png) 
+
+3. **CSS Validator** (Jigsaw):
+
+![css validation](docs/validation/val_css.png)
+
+4. **JSHint**:
+
+![JSHint validation](docs/validation/val_jshint.png)
+
+5. **Lighthouse** (Chrome DevTools):
+
 
 ### Accessibility
 
