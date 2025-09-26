@@ -94,15 +94,16 @@ For the branding of Kode Restaurant, I combined typefaces: **Libertinus Keyboard
 
 The following colours are used consistently across the Kode Restaurant project:
 
-| Purpose | Colour | Hex | Preview |
-|---------|--------|-----|---------|
-| Navbar & Footer background, form background, font on dark background (landing page) | Light Green | `#eff5e4` | <span style="background-color:#eff5e4; padding:6px 24px; border:1px solid #000;">&nbsp;</span> |
-| Fonts on light background | Brown | `#5e4b31` | <span style="background-color:#5e4b31; color:white; padding:6px 24px; display:inline-block;">Aa</span> |
-| Headings (H1) on dark/transparent landing page background | Gold | `#bb8726` | <span style="background-color:#bb8726; color:white; padding:6px 24px; display:inline-block;">Aa</span> |
-| Button: Confirmed | Green | `#057820e6` | <span style="background-color:#057820e6; color:white; padding:6px 24px; display:inline-block;">✔</span> |
-| Button: Cancelled | Orange | `#c16d07` | <span style="background-color:#c16d07; color:white; padding:6px 24px; display:inline-block;">✖</span> |
-| Button: Completed | Grey | `#6c757d` | <span style="background-color:#6c757d; color:white; padding:6px 24px; display:inline-block;">✔</span> |
+| Purpose | Colour | Hex |
+|---------|--------|-----|
+| Navbar & Footer background, form background, font on dark background (landing page) | Light Green | `#eff5e4` |
+| Fonts on light background | Brown | `#5e4b31` |
+| Headings (H1) on dark/transparent landing page background | Gold | `#bb8726` |
+| Button: Confirmed | Green | `#057820e6` |
+| Button: Cancelled | Orange | `#c16d07` |
+| Button: Completed | Grey | `#6c757d` |
 
+![colour palette](docs/colour-palette.png)
 
 ### Wireframes
 
@@ -191,6 +192,7 @@ On the top of this, three custom models manage the restaurant system:
 ## Resources & Tools
 
 - [dbdiagram](https://dbdiagram.io/home) to draw Entity-Relationship Diagram.
+- [coolors](https://coolors.co/) to create a colour palette.
 - [Birme](https://www.birme.net/) to resize, crop, compress and change the image format to WEBP.
 - [Contrast Checker](https://webaim.org/resources/contrastchecker/) to check the contrast between colours.
 - [Pixabay](https://pixabay.com/) as a source of backround and carousel images.
