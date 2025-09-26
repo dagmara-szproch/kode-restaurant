@@ -23,14 +23,9 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <!-- Flatpickr CSS-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    </noscript>
-
-
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">   
 </head>
+
 <body class="d-flex flex-column min-vh-100">
     <!-- Navbar-->
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
@@ -99,14 +94,13 @@
         </div>
     </nav>
 
-
     <main class="flex-grow-1 mt-5 pt-3  mb-4">
         {% block content %}
         <!-- Content goes here -->
         {% endblock content %}
     </main> 
 
-    
+    <!-- Footer -->
     <footer class="mt-auto">
         <div class="container text-center mt-3 mb-3">
            <p>
